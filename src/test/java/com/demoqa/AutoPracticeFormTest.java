@@ -1,13 +1,14 @@
 package com.demoqa;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selectors.byAttribute;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class AutoPracticeFormTest {
@@ -19,7 +20,6 @@ public class AutoPracticeFormTest {
         Configuration.holdBrowserOpen = true;
     }
 
-    File file = new File("src/test/resources/test.jpg");
     String name = "Mikhail";
     String surname = "Nesterov";
     String email = "onemanpara@gmail.com";
@@ -28,38 +28,37 @@ public class AutoPracticeFormTest {
     @Test
     void formTest() {
         open("/automation-practice-form");
-        $x("//input[@id='firstName']").setValue(name);
-        $x("//input[@id='lastName']").setValue(surname);
-        $x("//input[@id='userEmail']").setValue(email);
-        $x("//label[contains(text(), 'Male')]").click();
-        $x("//input[@id='userNumber']").setValue(number);
-        $x("//input[@id='dateOfBirthInput']").click();
-        $x("//select[@class='react-datepicker__month-select']").selectOption("August");
-        $x("//select[@class='react-datepicker__year-select']").selectOption("1998");
-        $x("//div[@class='react-datepicker__month-container']//div[@aria-label='Choose Wednesday, August 26th, 1998']").click();
-        $x("//div[@id='subjectsContainer']//input").setValue("Maths").pressEnter();
-        $x("//div[@id='hobbiesWrapper']//label[contains(text(), 'Sports')]").click();
-        $x("//div[@id='hobbiesWrapper']//label[contains(text(), 'Reading')]").click();
-        $x("//div[@id='hobbiesWrapper']//label[contains(text(), 'Music')]").click();
-        $x("//input[@id='uploadPicture']").uploadFile(file);
-        $x("//textarea[@placeholder='Current Address']").setValue("Test's Street");
-        $x("//div[@class=' css-tlfecz-indicatorContainer']").scrollIntoView(true);
-        $x("//div[@class=' css-tlfecz-indicatorContainer']").click();
-        $x("//div[@id='state']//div[contains(text(), 'Haryana')]").doubleClick();
-        $x("//div[@id='city']").click();
-        $x("//div[@id='city']//div[contains(text(), 'Karnal')]").click();
-        $x("//button[@id='submit']").click();
+        $("#firstName").setValue(name);
+        $("#lastName").setValue(surname);
+        $("#userEmail").setValue(email);
+        $("#genterWrapper").$(byText("Male")).click();
+        $("#userNumber").setValue(number);
+        $("#dateOfBirthInput").click();
+        $(".react-datepicker__month-select").selectOption("August");
+        $(".react-datepicker__year-select").selectOption("1998");
+        $(byAttribute("aria-label", "Choose Wednesday, August 26th, 1998")).click();
+        $("#subjectsInput").setValue("Maths").pressEnter();
+        $("#hobbiesWrapper").$(byText("Sports")).click();
+        $("#hobbiesWrapper").$(byText("Reading")).click();
+        $("#hobbiesWrapper").$(byText("Music")).click();
+        $("#uploadPicture").uploadFile(new File("src/test/resources/test.jpg"));
+        $("#currentAddress").setValue("Test's Street");
+        $("#state").scrollIntoView(true);
+        $("#state").click();
+        $("#state").$(byText("Haryana")).click();
+        $("#city").click();
+        $("#city").$(byText("Karnal")).click();
+        $("#submit").click();
 
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text(name));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text(surname));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text(email));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text(number));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("26 August,1998"));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("Male"));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("Maths"));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("Sports, Reading, Music"));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("test.jpg"));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("Test's Street"));
-        $x("//div[@class='table-responsive']").shouldHave(Condition.text("Haryana Karnal"));
+        $(".table-responsive").shouldHave(text(name));
+        $(".table-responsive").shouldHave(text(email));
+        $(".table-responsive").shouldHave(text(number));
+        $(".table-responsive").shouldHave(text("26 August,1998"));
+        $(".table-responsive").shouldHave(text("Male"));
+        $(".table-responsive").shouldHave(text("Maths"));
+        $(".table-responsive").shouldHave(text("Sports, Reading, Music"));
+        $(".table-responsive").shouldHave(text("test.jpg"));
+        $(".table-responsive").shouldHave(text("Test's Street"));
+        $(".table-responsive").shouldHave(text("Haryana Karnal"));
     }
 }
